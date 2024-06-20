@@ -20,6 +20,11 @@ module Devise
       end
 
       def authenticate!
+        unless self.token.present?
+          fail(:magic_link_invalid)
+          return
+        end
+
         begin
           data = decode_passwordless_token
         rescue Devise::Passwordless::LoginToken::InvalidOrExpiredTokenError
